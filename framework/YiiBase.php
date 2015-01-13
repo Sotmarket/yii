@@ -413,18 +413,21 @@ class YiiBase
 			{
 				if(self::$enableIncludePath===false)
 				{
-					foreach(self::$_includePaths as $path)
+					if (is_array(self::$_includePaths))
 					{
-						$classFile=$path.DIRECTORY_SEPARATOR.$className.'.php';
-						if(is_file($classFile))
+						foreach(self::$_includePaths as $path)
 						{
-							include($classFile);
-							if(YII_DEBUG && basename(realpath($classFile))!==$className.'.php')
-								throw new CException(Yii::t('yii','Class name "{class}" does not match class file "{file}".', array(
-									'{class}'=>$className,
-									'{file}'=>$classFile,
-								)));
-							break;
+							$classFile=$path.DIRECTORY_SEPARATOR.$className.'.php';
+							if(is_file($classFile))
+							{
+								include($classFile);
+								if(YII_DEBUG && basename(realpath($classFile))!==$className.'.php')
+									throw new CException(Yii::t('yii','Class name "{class}" does not match class file "{file}".', array(
+										'{class}'=>$className,
+										'{file}'=>$classFile,
+									)));
+								break;
+							}
 						}
 					}
 				}
